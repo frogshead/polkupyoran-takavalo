@@ -26,3 +26,4 @@ portable-atomic = { version = "1.5", features = ["unsafe-assume-single-core"] }
 
 [profile.release]
 debug = 2
+strip = "debuginfo"
