@@ -1,0 +1,8 @@
+[target.'cfg(all(target_arch = "{{ arch }}", target_os = "none"))']
+runner = "probe-rs run --chip {{ probe_chip }}"
+
+[build]
+target = "{{ rust_target }}"
+
+[env]
+DEFMT_LOG = "info"
