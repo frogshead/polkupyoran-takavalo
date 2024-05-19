@@ -1,8 +1,10 @@
 [target.'cfg(all(target_arch = "{{ arch }}", target_os = "none"))']
-runner = "probe-rs run --chip {{ probe_chip }}"
+runner = "probe-rs run --chip STM32G030F6Px" # STM32G030F6Px
 
 [build]
-target = "{{ rust_target }}"
+target = "thumbv6m-none-eabi"
 
 [env]
-DEFMT_LOG = "info"
+DEFMT_LOG = "trace"
+
+
