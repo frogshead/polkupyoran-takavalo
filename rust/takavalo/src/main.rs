@@ -25,6 +25,7 @@ async fn main(_spawner: Spawner) {
             Timer::after_millis(300).await;
             led.toggle();
         }
+        led.set_low();
         exti.wait_for_rising_edge().await;
     }
 }
