@@ -11,6 +11,7 @@ use embassy_stm32::exti::ExtiInput;
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
     let p = embassy_stm32::init(Default::default());
+    
     // Configure PA0 as input with pull-down
     let button = Input::new(p.PA0, Pull::Down);
     // Configure EXTI (External Interrupt) on PA0

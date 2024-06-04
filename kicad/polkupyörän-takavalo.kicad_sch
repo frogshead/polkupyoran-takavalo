@@ -2697,6 +2697,16 @@
 		)
 		(uuid "3aa09298-2374-42fb-8263-46dfdf2d4502")
 	)
+	(text "First build version does not have option set Boot0 (pin19) and makes \nthe board programmable once :( \n\nOther option is set the boot options by the sw on flash register "
+		(exclude_from_sim no)
+		(at 200.66 137.922 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "635e5d42-9a9d-4830-9ba9-f658ee1030d8")
+	)
 	(text "PA0 => WKUP1 to wake up from sleep"
 		(exclude_from_sim no)
 		(at 201.676 80.772 0)
