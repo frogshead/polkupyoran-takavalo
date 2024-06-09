@@ -5,12 +5,27 @@ use embassy_executor::Spawner;
 use {defmt_rtt as _, panic_probe as _};
 use embassy_time::Timer;
 use embassy_stm32::gpio::{Input, Level, Output, Pull, Speed};
+// use embassy_stm32::pac::syscfg::regs:
+use embassy_stm32::pac::flash::regs::Optr;
+use embassy_stm32::pac::flash::regs::Secr;
 
 use embassy_stm32::exti::ExtiInput;
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
     let p = embassy_stm32::init(Default::default());
+    let mut o = Optr{
+    ..Default::default()
+
+    };
+    o.set_n_boot0(false);
+    o.set_n_boot1(true);
+    o.set_n_boot_sel(true);
+
+    let mut s = Secr{
+        ..Default::default()
+    };
+    s.set_boot_lock(false);
     // Configure PA0 as input with pull-down
     let button = Input::new(p.PA0, Pull::Down);
     // Configure EXTI (External Interrupt) on PA0
