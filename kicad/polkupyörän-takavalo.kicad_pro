@@ -593,7 +593,7 @@
     },
     "net_format_name": "",
     "page_layout_descr_file": "",
-    "plot_directory": "",
+    "plot_directory": "pdfs/",
     "spice_current_sheet_as_root": false,
     "spice_external_command": "spice \"%I\"",
     "spice_model_current_sheet_as_root": true,
@@ -606,7 +606,7 @@
   "sheets": [
     [
       "10bcdd59-2877-4c05-a85e-d68987e39829",
-      "Root"
+      "Juuri"
     ]
   ],
   "text_variables": {}
