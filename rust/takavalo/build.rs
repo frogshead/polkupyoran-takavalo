@@ -12,6 +12,7 @@ use std::env;
 use std::fs::File;
 use std::io::Write;
 use std::path::PathBuf;
+use chrono::prelude::*;
 
 fn main() {
     // Put `memory.x` in our output directory and ensure it's
@@ -32,4 +33,12 @@ fn main() {
     println!("cargo:rustc-link-arg-bins=--nmagic");
     println!("cargo:rustc-link-arg-bins=-Tlink.x");
     println!("cargo:rustc-link-arg-bins=-Tdefmt.x");
+
+    let now = Utc::now();
+    let timestamp = now.timestamp(); // Get UNIX timestamp (seconds since epoch)
+
+    // Pass it as a Cargo environment variable
+    println!("cargo:rustc-env=BUILD_TIMESTAMP={}", timestamp);
+
+
 }

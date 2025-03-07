@@ -1,6 +1,7 @@
 #![no_std]
 #![no_main]
 
+// use cortex_m::{asm::delay, delay::{self, Delay}, prelude::_embedded_hal_blocking_delay_DelayUs};
 use embassy_executor::Spawner;
 use {defmt_rtt as _, panic_probe as _};
 use embassy_time::Timer;
@@ -9,7 +10,14 @@ use embassy_stm32::usart::{Config, Uart};
 use embassy_stm32::{bind_interrupts, peripherals, usart};
 use embassy_stm32::exti::ExtiInput;
 use embassy_stm32::rtc::{DateTime, DayOfWeek, Rtc, RtcConfig};
+// use embassy_stm32::adc::Adc;
+// use embassy_stm32::rcc::Config as ClockConfig;
 use defmt::info;
+use core::str::FromStr;
+use chrono::{DateTime as chronoDateTime, Datelike, Timelike};
+
+const BUILD_TIMESTAMP: &str = env!("BUILD_TIMESTAMP");
+
 
 
 bind_interrupts!(struct Irqs {
@@ -30,17 +38,43 @@ async fn main(_spawner: Spawner) {
     // Configure EXTI (External Interrupt) on PA0
     let mut exti = ExtiInput::new(button,p.EXTI0);
     let mut led = Output::new(p.PB9, Level::High, Speed::Low);
+    let timestamp = i64::from_str(BUILD_TIMESTAMP).expect("Invalid timestamp");
 
-    let now = DateTime::from(2023, 6, 14, DayOfWeek::Friday, 15, 59, 10);
+    // Parse the timestamp into a `NaiveDateTime`
+    let datetime = chronoDateTime::from_timestamp(timestamp, 0)
+       .expect("Failed to parse timestamp");
+    // info!("Datetime from build: {:?}", datetime.to_string());
+
+    let now = DateTime::from(datetime.year().try_into().unwrap(),
+    datetime.month().try_into().unwrap(),
+    datetime.day().try_into().unwrap(),
+    match datetime.weekday() {
+        chrono::Weekday::Mon => DayOfWeek::Monday,
+        chrono::Weekday::Tue => DayOfWeek::Tuesday,
+        chrono::Weekday::Wed => DayOfWeek::Wednesday,
+        chrono::Weekday::Thu => DayOfWeek::Thursday,
+        chrono::Weekday::Fri => DayOfWeek::Friday,
+        chrono::Weekday::Sat => DayOfWeek::Saturday,
+        chrono::Weekday::Sun => DayOfWeek::Sunday,
+    },
+    datetime.hour().try_into().unwrap(),
+    datetime.minute().try_into().unwrap(),
+    datetime.second().try_into().unwrap());
 
     let mut rtc = Rtc::new(p.RTC, RtcConfig::default());
+    
 
     rtc.set_datetime(now.unwrap()).expect("datetime not set");
     let now: DateTime = rtc.now().unwrap().into();
 
     info!("{}:{}:{}", now.hour(), now.minute(), now.second());
     
-    // Blinking 30s and then try to sleep and waiting for interrupt
+    //let mut clk_config = ClockConfig::default();
+    
+    // let delay = Delay::new(p.SYSCFG., ahb_frequency).delay_us(200);
+    
+    // let mut adc = Adc::new(p.ADC1, delay);
+    // // Blinking 30s and then try to sleep and waiting for interrupt
     loop {
         info!("Toggling LED");
         for _ in 0..100{
