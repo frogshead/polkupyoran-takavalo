@@ -1,4 +1,4 @@
-[target.'cfg(all(target_arch = "{{ arch }}", target_os = "none"))']
+[target.'cfg(all(target_arch = "arm", target_os = "none"))']
 runner = "probe-rs run --chip STM32G030F6Px" # STM32G030F6Px
 
 [build]
